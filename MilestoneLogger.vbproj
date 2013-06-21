@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{627AE119-AADB-4ABB-A8B5-20BB642D9D13}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <StartupObject>Sub Main</StartupObject>
+    <RootNamespace>MilestoneLogger</RootNamespace>
+    <AssemblyName>MilestoneLogger</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Console</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>MilestoneLogger.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>MilestoneLogger.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\NHibernate\Factory.vb" />
+    <Compile Include="DataAccess\NHibernate\Mapping\PersonMapping.vb" />
+    <Compile Include="DataAccess\NHibernate\Query\PersonQuery.vb" />
+    <Compile Include="Framework\UserInterface\CommandGroup\CheckBoxCommand.vb" />
+    <Compile Include="Framework\UserInterface\CommandGroup\CommandGroup.vb" />
+    <Compile Include="Framework\UserInterface\CommandGroup\ICommand.vb" />
+    <Compile Include="Framework\UserInterface\CommandGroup\LinkLabelCommand.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\IActionPanelBuildable.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\IListBuilder.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\IListViewBuilder.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\IMainFormListViewView.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\MainFormListViewView.Designer.vb">
+      <DependentUpon>MainFormListViewView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UserInterface\MainFormControls\MainFormListViewView.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Framework\UserInterface\MainFormControls\MainListViewPresenter.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\PersonActionPanelBuilder.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\PersonListView.Designer.vb">
+      <DependentUpon>PersonListView.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UserInterface\MainFormControls\PersonListView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Framework\UserInterface\MainFormControls\PersonListViewBuilder.vb" />
+    <Compile Include="Framework\UserInterface\MainFormControls\PersonMainListViewPresenter.vb" />
+    <Compile Include="Framework\UserInterface\UserControl\ActionPanel.designer.vb">
+      <DependentUpon>ActionPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UserInterface\UserControl\ActionPanel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Framework\UserInterface\UserControl\CueTextBox.designer.vb">
+      <DependentUpon>CueTextBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UserInterface\UserControl\CueTextBox.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Framework\UserInterface\UserControl\PageControl.designer.vb">
+      <DependentUpon>PageControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\UserInterface\UserControl\PageControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Model\ModelEntity.vb" />
+    <Compile Include="Model\Person.vb" />
+    <Compile Include="Presenter\PersonPresenter.vb" />
+    <Compile Include="Service\PersonService.vb" />
+    <Compile Include="View\IView\IPersonView.vb" />
+    <Compile Include="View\PersonView.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\PersonView.Designer.vb">
+      <DependentUpon>PersonView.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Framework\UserInterface\MainFormControls\MainFormListViewView.resx">
+      <DependentUpon>MainFormListViewView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Framework\UserInterface\MainFormControls\PersonListView.resx">
+      <DependentUpon>PersonListView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Framework\UserInterface\UserControl\ActionPanel.resx">
+      <DependentUpon>ActionPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Framework\UserInterface\UserControl\PageControl.resx">
+      <DependentUpon>PageControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PersonView.resx">
+      <DependentUpon>PersonView.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\collapse.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\expand.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LeftSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RightSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refreshsmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exportsmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playsmall.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
