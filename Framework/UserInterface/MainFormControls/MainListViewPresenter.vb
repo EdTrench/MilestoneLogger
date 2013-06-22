@@ -34,7 +34,6 @@ Public MustInherit Class MainListViewPresenter(Of T)
     Friend MustOverride Function SetTitle() As String
     Friend MustOverride Function SetDescription() As String
     Friend MustOverride Function SetIcon() As Image
-    Friend MustOverride ReadOnly Property Title As String
     Friend MustOverride ReadOnly Property Description As String
     Friend MustOverride Sub SetQuery()
     Friend MustOverride Function RefreshQuery() As NHibernate.ICriteria
@@ -45,6 +44,9 @@ Public MustInherit Class MainListViewPresenter(Of T)
     Friend Overridable Function GetActionPanelBuilder() As IActionPanelBuildable
         Return Nothing
     End Function
+    Friend Overridable Function GetFilterPanelBuilder() As IFilterPanelBuildable
+        Return Nothing
+    End Function
 
     Public Sub Initialise()
         QueryCiteria = RefreshQuery()
@@ -53,6 +55,7 @@ Public MustInherit Class MainListViewPresenter(Of T)
         SetNavigationTitle()
         SetNavigationDescription()
         BuildActionPanel()
+        BuildFilterPanel()
     End Sub
 
     Private Sub SetNavigationIcon()
@@ -119,6 +122,10 @@ Public MustInherit Class MainListViewPresenter(Of T)
 
     Private Sub BuildActionPanel()
         MainListView.SetActionPanel(GetActionPanelBuilder())
+    End Sub
+
+    Private Sub BuildFilterPanel()
+        MainListView.SetFilterPanel(GetFilterPanelBuilder())
     End Sub
 
 End Class

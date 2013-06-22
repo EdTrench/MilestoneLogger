@@ -22,9 +22,9 @@
 
     Private Sub AddlistviewColumns(target As ListView)
         With target.Columns
-            .Add("Id", 80)
-            .Add("Firstname", 240)
-            .Add("Surname", 240)
+            .Add("Id", 50)
+            .Add("Firstname", 100)
+            .Add("Surname", 150)
             .Add("Date Of Birth", 90)
         End With
     End Sub

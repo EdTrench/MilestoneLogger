@@ -14,7 +14,8 @@ Public Interface IMainFormListViewView
     Sub ResetPageNumber()
     Sub SetList(Builder As IListBuilder)
     Sub SetItemCount(Count As Integer)
-    Sub SetActionPanel(x As IActionPanelBuildable)
+    Sub SetActionPanel(actionPanel As IActionPanelBuildable)
+    Sub SetFilterPanel(filterPanel As IFilterPanelBuildable)
 
     Event RaiseSelectListItem As SelectListItemItemHandler
     Event RaiseQuickSearch As QuickSearchHandler

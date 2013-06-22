@@ -37,12 +37,6 @@
         m_personQuery = New PersonQuery()
     End Sub
 
-    Friend Overrides ReadOnly Property Title As String
-        Get
-            Return "Persons"
-        End Get
-    End Property
-
     Friend Overrides Function SetDescription() As String
         Return "Persons"
     End Function
@@ -57,5 +51,9 @@
 
     Friend Overrides Function GetActionPanelBuilder() As IActionPanelBuildable
         Return New PersonActionPanelBuilder()
+    End Function
+
+    Friend Overrides Function GetFilterPanelBuilder() As IFilterPanelBuildable
+        Return New PersonFilterPanelBuilder()
     End Function
 End Class

@@ -25,10 +25,13 @@ Partial Class PersonListView
         Me.MainFormListViewView = New MilestoneLogger.MainFormListViewView()
         Me.SuspendLayout()
         '
-        'MainFormListViewView1
+        'MainFormListViewView
         '
         Me.MainFormListViewView.Location = New System.Drawing.Point(13, 13)
-        Me.MainFormListViewView.Name = "MainFormListViewView1"
+        Me.MainFormListViewView.Name = "MainFormListViewView"
+        Me.MainFormListViewView.NavigationDescription = "Helpful description for this feature goes here."
+        Me.MainFormListViewView.NavigationIcon = Nothing
+        Me.MainFormListViewView.NavigationTitle = "[lblNavigationTitle]"
         Me.MainFormListViewView.Size = New System.Drawing.Size(683, 395)
         Me.MainFormListViewView.TabIndex = 0
         '
@@ -36,7 +39,7 @@ Partial Class PersonListView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(721, 429)
+        Me.ClientSize = New System.Drawing.Size(918, 421)
         Me.Controls.Add(Me.MainFormListViewView)
         Me.Name = "PersonListView"
         Me.Text = "Person List View"

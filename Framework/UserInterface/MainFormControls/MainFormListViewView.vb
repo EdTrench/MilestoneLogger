@@ -108,19 +108,41 @@
 
 #Region "Action Panel"
 
-    Private CurrentActionPanelBuilder As IActionPanelBuildable
+    Private m_currentActionPanelBuilder As IActionPanelBuildable
 
-    Public Sub SetActionPanel(ActionPanelBuilder As IActionPanelBuildable) Implements IMainFormListViewView.SetActionPanel
-        If ActionPanelBuilder Is Nothing Then
+    Public Sub SetActionPanel(actionPanelBuilder As IActionPanelBuildable) Implements IMainFormListViewView.SetActionPanel
+
+        If actionPanelBuilder Is Nothing Then
             MainListViewSplitContainer.Panel2Collapsed = True
         Else
-            CurrentActionPanelBuilder = ActionPanelBuilder
+            m_currentActionPanelBuilder = actionPanelBuilder
             BuildActionPanel()
         End If
     End Sub
 
     Private Sub BuildActionPanel()
-        CurrentActionPanelBuilder.BuildActionPanel(MainFormActionPanel)
+        m_currentActionPanelBuilder.BuildActionPanel(MainFormActionPanel)
+    End Sub
+
+#End Region
+
+#Region "Filter Panel"
+
+    Private m_currentFilterPanelBuilder As IFilterPanelBuildable
+
+    Public Sub SetFilterPanel(filterPanelBuilder As IFilterPanelBuildable) Implements IMainFormListViewView.SetFilterPanel
+
+        If filterPanelBuilder Is Nothing Then
+            MainListViewSplitContainer.Panel2Collapsed = True
+        Else
+            m_currentFilterPanelBuilder = filterPanelBuilder
+            BuildFilterPanel()
+        End If
+
+    End Sub
+
+    Private Sub BuildFilterPanel()
+        m_currentFilterPanelBuilder.BuildFilterPanel(MainFormFilterPanel)
     End Sub
 
 #End Region

@@ -1,3 +1,3 @@
 ﻿Public Interface IActionPanelBuildable
-    Sub BuildActionPanel(Target As ActionPanel)
+    Sub BuildActionPanel(target As ActionPanel)
 End Interface
