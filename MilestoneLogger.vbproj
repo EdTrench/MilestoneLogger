@@ -84,9 +84,10 @@
     <Compile Include="DataAccess\NHibernate\Query\PersonQuery.vb" />
     <Compile Include="Framework\UserInterface\CommandGroup\CheckBoxCommand.vb" />
     <Compile Include="Framework\UserInterface\CommandGroup\CommandGroup.vb" />
+    <Compile Include="Framework\UserInterface\CommandGroup\FilterFromToDateCommand.vb" />
     <Compile Include="Framework\UserInterface\CommandGroup\ICommand.vb" />
     <Compile Include="Framework\UserInterface\CommandGroup\LinkLabelCommand.vb" />
-    <Compile Include="Framework\UserInterface\CommandGroup\MonthCalendarCommand.vb" />
+    <Compile Include="Framework\UserInterface\CommandGroup\DateTimePickerCommand.vb" />
     <Compile Include="Framework\UserInterface\MainFormControls\IActionPanelBuildable.vb" />
     <Compile Include="Framework\UserInterface\MainFormControls\IFilterPanelBuildable.vb" />
     <Compile Include="Framework\UserInterface\MainFormControls\IListBuilder.vb" />

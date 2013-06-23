@@ -23,7 +23,6 @@ Partial Class MainFormListViewView
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.MainListViewSplitContainer = New System.Windows.Forms.SplitContainer()
-        Me.MainFormListViewPageControl = New MilestoneLogger.PageControl()
         Me.MainListViewToolStrip = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButtonRefresh = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButtonExport = New System.Windows.Forms.ToolStripButton()
@@ -31,14 +30,15 @@ Partial Class MainFormListViewView
         Me.MainListViewToolStripStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MainFormListView = New System.Windows.Forms.ListView()
         Me.ActionFilterSplitContainer = New System.Windows.Forms.SplitContainer()
-        Me.MainFormActionPanel = New MilestoneLogger.ActionPanel()
-        Me.MainFormFilterPanel = New MilestoneLogger.FilterPanel()
         Me.MainListViewOverviewPanel = New System.Windows.Forms.Panel()
         Me.MainFormIcon = New System.Windows.Forms.PictureBox()
         Me.QuickSearchButton = New System.Windows.Forms.Button()
-        Me.QuickSearchCueTextBox = New MilestoneLogger.CueTextBox()
         Me.lblNavigationDescription = New System.Windows.Forms.Label()
         Me.lblNavigationTitle = New System.Windows.Forms.Label()
+        Me.QuickSearchCueTextBox = New MilestoneLogger.CueTextBox()
+        Me.MainFormListViewPageControl = New MilestoneLogger.PageControl()
+        Me.MainFormActionPanel = New MilestoneLogger.ActionPanel()
+        Me.MainFormFilterPanel = New MilestoneLogger.FilterPanel()
         CType(Me.MainListViewSplitContainer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.MainListViewSplitContainer.Panel1.SuspendLayout()
         Me.MainListViewSplitContainer.Panel2.SuspendLayout()
@@ -74,14 +74,6 @@ Partial Class MainFormListViewView
         Me.MainListViewSplitContainer.Size = New System.Drawing.Size(680, 342)
         Me.MainListViewSplitContainer.SplitterDistance = 515
         Me.MainListViewSplitContainer.TabIndex = 0
-        '
-        'MainFormListViewPageControl
-        '
-        Me.MainFormListViewPageControl.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.MainFormListViewPageControl.Location = New System.Drawing.Point(425, 323)
-        Me.MainFormListViewPageControl.Name = "MainFormListViewPageControl"
-        Me.MainFormListViewPageControl.Size = New System.Drawing.Size(87, 19)
-        Me.MainFormListViewPageControl.TabIndex = 3
         '
         'MainListViewToolStrip
         '
@@ -156,20 +148,6 @@ Partial Class MainFormListViewView
         Me.ActionFilterSplitContainer.SplitterDistance = 169
         Me.ActionFilterSplitContainer.TabIndex = 0
         '
-        'MainFormActionPanel
-        '
-        Me.MainFormActionPanel.Location = New System.Drawing.Point(3, 3)
-        Me.MainFormActionPanel.Name = "MainFormActionPanel"
-        Me.MainFormActionPanel.Size = New System.Drawing.Size(155, 163)
-        Me.MainFormActionPanel.TabIndex = 0
-        '
-        'MainFormFilterPanel
-        '
-        Me.MainFormFilterPanel.Location = New System.Drawing.Point(4, 4)
-        Me.MainFormFilterPanel.Name = "MainFormFilterPanel"
-        Me.MainFormFilterPanel.Size = New System.Drawing.Size(154, 162)
-        Me.MainFormFilterPanel.TabIndex = 0
-        '
         'MainListViewOverviewPanel
         '
         Me.MainListViewOverviewPanel.Controls.Add(Me.MainFormIcon)
@@ -201,17 +179,6 @@ Partial Class MainFormListViewView
         Me.QuickSearchButton.TabIndex = 4
         Me.QuickSearchButton.UseVisualStyleBackColor = True
         '
-        'QuickSearchCueTextBox
-        '
-        Me.QuickSearchCueTextBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.QuickSearchCueTextBox.Cue = "Find..."
-        Me.QuickSearchCueTextBox.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.QuickSearchCueTextBox.Location = New System.Drawing.Point(468, 13)
-        Me.QuickSearchCueTextBox.Multiline = True
-        Me.QuickSearchCueTextBox.Name = "QuickSearchCueTextBox"
-        Me.QuickSearchCueTextBox.Size = New System.Drawing.Size(183, 23)
-        Me.QuickSearchCueTextBox.TabIndex = 3
-        '
         'lblNavigationDescription
         '
         Me.lblNavigationDescription.AutoSize = True
@@ -232,6 +199,39 @@ Partial Class MainFormListViewView
         Me.lblNavigationTitle.Size = New System.Drawing.Size(173, 25)
         Me.lblNavigationTitle.TabIndex = 0
         Me.lblNavigationTitle.Text = "[lblNavigationTitle]"
+        '
+        'QuickSearchCueTextBox
+        '
+        Me.QuickSearchCueTextBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.QuickSearchCueTextBox.Cue = "Find..."
+        Me.QuickSearchCueTextBox.Font = New System.Drawing.Font("Segoe UI Semibold", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.QuickSearchCueTextBox.Location = New System.Drawing.Point(468, 13)
+        Me.QuickSearchCueTextBox.Multiline = True
+        Me.QuickSearchCueTextBox.Name = "QuickSearchCueTextBox"
+        Me.QuickSearchCueTextBox.Size = New System.Drawing.Size(183, 23)
+        Me.QuickSearchCueTextBox.TabIndex = 3
+        '
+        'MainFormListViewPageControl
+        '
+        Me.MainFormListViewPageControl.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.MainFormListViewPageControl.Location = New System.Drawing.Point(425, 323)
+        Me.MainFormListViewPageControl.Name = "MainFormListViewPageControl"
+        Me.MainFormListViewPageControl.Size = New System.Drawing.Size(87, 19)
+        Me.MainFormListViewPageControl.TabIndex = 3
+        '
+        'MainFormActionPanel
+        '
+        Me.MainFormActionPanel.Location = New System.Drawing.Point(3, 3)
+        Me.MainFormActionPanel.Name = "MainFormActionPanel"
+        Me.MainFormActionPanel.Size = New System.Drawing.Size(155, 163)
+        Me.MainFormActionPanel.TabIndex = 0
+        '
+        'MainFormFilterPanel
+        '
+        Me.MainFormFilterPanel.Location = New System.Drawing.Point(4, 3)
+        Me.MainFormFilterPanel.Name = "MainFormFilterPanel"
+        Me.MainFormFilterPanel.Size = New System.Drawing.Size(154, 163)
+        Me.MainFormFilterPanel.TabIndex = 0
         '
         'MainFormListViewView
         '

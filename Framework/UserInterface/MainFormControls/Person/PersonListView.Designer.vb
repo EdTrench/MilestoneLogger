@@ -39,7 +39,7 @@ Partial Class PersonListView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(918, 421)
+        Me.ClientSize = New System.Drawing.Size(705, 421)
         Me.Controls.Add(Me.MainFormListViewView)
         Me.Name = "PersonListView"
         Me.Text = "Person List View"
