@@ -46,4 +46,7 @@
         Return newListItem
     End Function
 
+    Public Function OrderBy(index As Integer) As String Implements IListBuilder.OrderBy
+        Throw New NotImplementedException
+    End Function
 End Class

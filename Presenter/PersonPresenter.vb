@@ -3,14 +3,12 @@
     Private WithEvents m_currentView As IPersonView
     Private m_currentPerson As Person
     Private m_service As PersonService
-    Private m_session As NHibernate.ISession
 
     Public Sub New(person As Person, view As IPersonView, session As NHibernate.ISession)
 
         m_currentView = view
         m_currentPerson = person
         m_service = New PersonService()
-        m_session = session
 
     End Sub
 
@@ -50,14 +48,14 @@
     Private Sub SaveModel()
 
         MapViewToModel()
-        m_service.Save(m_currentPerson, m_session)
+        m_service.Save(m_currentPerson.Id)
 
     End Sub
 
     Private Sub RemoveModel()
 
         MapViewToModel()
-        m_service.Remove(m_currentPerson, m_session)
+        m_service.Remove(m_currentPerson.Id)
 
     End Sub
 

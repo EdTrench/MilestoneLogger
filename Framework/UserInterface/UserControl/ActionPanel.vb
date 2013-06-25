@@ -16,7 +16,9 @@
         If HasCloseButton Then CloseCommandGroup = New CommandGroup("", False)
     End Sub
 
-    Public Sub BuildActionPanelCompenetents()
+    Public Sub BuildActionPanelComponents(Optional HasCloseButton As Boolean = False)
+        Me.HasCloseButton = HasCloseButton
+        If HasCloseButton Then CloseCommandGroup = New CommandGroup("", False)
         For Each cg In CommandGroups
             cg.CreateCommandPanel(tlpActions)
         Next
@@ -34,6 +36,12 @@
 
     Private Sub CloseForm()
         ParentForm.Close()
+    End Sub
+
+    Public Sub ClearActionPanelComponents()
+        CommandGroups = New List(Of CommandGroup)
+        Me.tlpActions.Controls.Clear()
+        Me.tlpActions.RowStyles.Clear()
     End Sub
 
 End Class

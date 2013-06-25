@@ -22,7 +22,7 @@ Public Class PersonQuery
 
     End Function
 
-    Public Function CreateQuery(session As Global.NHibernate.ISession) As NHibernate.ICriteria
+    Public Shared Function CreateQuery(session As Global.NHibernate.ISession) As NHibernate.ICriteria
 
         Return session.CreateCriteria(Of Person)()
 
@@ -34,7 +34,7 @@ Public Class PersonQuery
 
     End Function
 
-    Public Function CountAll(session As Global.NHibernate.ISession) As Integer
+    Public Shared Function CountAll(session As Global.NHibernate.ISession) As Integer
 
         Return CreateQuery(session).SetProjection(NHibernate.Criterion.Projections.RowCount).FutureValue(Of Integer).Value
 

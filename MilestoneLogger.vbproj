@@ -99,6 +99,7 @@
     <Compile Include="Framework\UserInterface\MainFormControls\MainFormListViewView.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Framework\UserInterface\MainFormControls\MainFormUserQuery.vb" />
     <Compile Include="Framework\UserInterface\MainFormControls\MainListViewPresenter.vb" />
     <Compile Include="Framework\UserInterface\MainFormControls\Person\PersonActionPanelBuilder.vb" />
     <Compile Include="Framework\UserInterface\MainFormControls\Person\PersonFilterPanelBuilder.vb" />
