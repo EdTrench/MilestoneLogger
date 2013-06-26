@@ -48,14 +48,14 @@
     Private Sub SaveModel()
 
         MapViewToModel()
-        m_service.Save(m_currentPerson.Id)
+        m_service.Save(m_currentPerson)
 
     End Sub
 
     Private Sub RemoveModel()
 
         MapViewToModel()
-        m_service.Remove(m_currentPerson.Id)
+        m_service.Remove(m_currentPerson)
 
     End Sub
 

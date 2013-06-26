@@ -28,7 +28,7 @@ Public Class PersonQuery
 
     End Function
 
-    Public Function GetById(id As Integer, session As Global.NHibernate.ISession) As NHibernate.IQueryOver(Of Person)
+    Public Shared Function GetById(id As Integer, session As Global.NHibernate.ISession) As NHibernate.IQueryOver(Of Person)
 
         Return session.QueryOver(Of Person).Where(Function(x) x.Id = id)
 

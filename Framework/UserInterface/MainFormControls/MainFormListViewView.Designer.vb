@@ -123,6 +123,7 @@ Partial Class MainFormListViewView
         Me.MainFormListView.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.MainFormListView.FullRowSelect = True
         Me.MainFormListView.Location = New System.Drawing.Point(3, 28)
         Me.MainFormListView.Name = "MainFormListView"
         Me.MainFormListView.Size = New System.Drawing.Size(509, 289)

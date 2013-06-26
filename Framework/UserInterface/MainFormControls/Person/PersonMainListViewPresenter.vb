@@ -62,6 +62,6 @@
     End Function
 
     Friend Overrides Sub OnOpenListItem(id As Integer)
-
+        m_personService.Open(id)
     End Sub
 End Class
