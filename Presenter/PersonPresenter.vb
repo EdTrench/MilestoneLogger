@@ -48,8 +48,11 @@
     Private Sub SaveModel()
 
         MapViewToModel()
-        m_service.Save(m_currentPerson)
-
+        If m_currentPerson.Id = 0 Then
+            m_service.Save(m_currentPerson)
+        Else
+            m_service.Update(m_currentPerson)
+        End If
     End Sub
 
     Private Sub RemoveModel()

@@ -1,5 +1,17 @@
 ﻿Public Class PersonService
 
+    Public Sub Update(person As Person)
+
+        Using session As NHibernate.ISession = SessionManager.Factory.OpenSession()
+            Using transaction = session.BeginTransaction()
+                Dim q = New PersonQuery()
+                q.Update(person, session)
+                transaction.Commit()
+            End Using
+        End Using
+
+    End Sub
+
     Public Sub Save(person As Person)
 
         Using session As NHibernate.ISession = SessionManager.Factory.OpenSession()
