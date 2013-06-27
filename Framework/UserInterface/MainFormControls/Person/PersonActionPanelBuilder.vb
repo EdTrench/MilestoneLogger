@@ -7,12 +7,12 @@
     Private m_service As PersonService
 
     Public Sub New()
-        'default
+        m_service = New PersonService()
     End Sub
 
     Public Sub New(ids As System.Collections.Generic.List(Of Integer))
+        Me.New()
         m_selectedIds = ids
-        m_service = New PersonService()
     End Sub
 
     Public Sub BuildActionPanel(Target As ActionPanel) Implements IActionPanelBuildable.BuildActionPanel
@@ -40,7 +40,7 @@
     End Sub
 
     Private Sub Create()
-        m_service.Create()
+        m_service.Open()
     End Sub
 
 End Class

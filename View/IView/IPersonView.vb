@@ -12,5 +12,6 @@ Public Interface IPersonView
     Event Remove As DeleteHandler
 
     Sub ShowPerson()
+    Sub ClosePerson()
 
 End Interface

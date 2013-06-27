@@ -56,8 +56,12 @@
     End Sub
 
     Public Sub ShowPerson() Implements IPersonView.ShowPerson
-        RegisterHandlers()
-        ShowDialog()
+        Me.RegisterHandlers()
+        Me.ShowDialog()
+    End Sub
+
+    Public Sub ClosePerson() Implements IPersonView.ClosePerson
+        Me.Close()
     End Sub
 
 End Class

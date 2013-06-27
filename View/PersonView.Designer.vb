@@ -32,7 +32,6 @@ Partial Class PersonView
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lnkSave = New System.Windows.Forms.LinkLabel()
         Me.lnkRemove = New System.Windows.Forms.LinkLabel()
-        Me.lnkNew = New System.Windows.Forms.LinkLabel()
         Me.SuspendLayout()
         '
         'txtFirstname
@@ -120,22 +119,11 @@ Partial Class PersonView
         Me.lnkRemove.TabStop = True
         Me.lnkRemove.Text = "Remove"
         '
-        'lnkNew
-        '
-        Me.lnkNew.AutoSize = True
-        Me.lnkNew.Location = New System.Drawing.Point(497, 50)
-        Me.lnkNew.Name = "lnkNew"
-        Me.lnkNew.Size = New System.Drawing.Size(29, 13)
-        Me.lnkNew.TabIndex = 10
-        Me.lnkNew.TabStop = True
-        Me.lnkNew.Text = "New"
-        '
         'PersonView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(556, 212)
-        Me.Controls.Add(Me.lnkNew)
         Me.Controls.Add(Me.lnkRemove)
         Me.Controls.Add(Me.lnkSave)
         Me.Controls.Add(Me.Label4)
@@ -162,6 +150,5 @@ Partial Class PersonView
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents lnkSave As System.Windows.Forms.LinkLabel
     Friend WithEvents lnkRemove As System.Windows.Forms.LinkLabel
-    Friend WithEvents lnkNew As System.Windows.Forms.LinkLabel
 
 End Class

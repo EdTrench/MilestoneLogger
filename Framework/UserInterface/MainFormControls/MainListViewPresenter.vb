@@ -1,22 +1,25 @@
-﻿Public Enum QueryState
-    Criteria
-    QuickSearch
-End Enum
+﻿Public MustInherit Class MainListViewPresenter(Of T)
 
-Public MustInherit Class MainListViewPresenter(Of T)
-
-    Friend session As NHibernate.ISession
+    Friend nHibernateSession As NHibernate.ISession
     Friend ObjectList As IList(Of T)
-
-    Private CurrentUserQuery As MainFormUserQuery
+    Friend QueryHelper As IListViewQueryable
+    Friend CurrentQueryCriteria As NHibernate.ICriteria
+    Private CurrentUserCriteria As MainFormUserCriteria
     Private WithEvents MainListView As IMainFormListViewView
+
+    Friend MustOverride Sub OnOpenListItem(id As Integer)
+    Friend MustOverride Sub SetQuery()
+    Friend MustOverride Function GetIcon() As Image
+    Friend MustOverride Function GetTitle() As String
+    Friend MustOverride Function GetDescription() As String
+    Friend MustOverride Function GetListBuilder() As IListBuilder
 
     Friend Sub New(MainForm As IMainFormListViewView)
         MainListView = MainForm
-        session = SessionManager.Factory.OpenSession()
-        CurrentUserQuery = GetDefaultUserQuery()
+        nHibernateSession = SessionManager.Factory.OpenSession()
         SetQuery()
-        SetUserQuery()
+        ResetUserCriteria()
+        SetMainFormUserCriteria()
         AddEventHandlers()
     End Sub
 
@@ -28,33 +31,27 @@ Public MustInherit Class MainListViewPresenter(Of T)
         AddHandler MainListView.RaiseOpenListItem, AddressOf OnOpenListItem
     End Sub
 
-    Friend MustOverride Sub OnOpenListItem(id As Integer)
-    Friend MustOverride Sub SetQuery()
-    Friend MustOverride Function GetIcon() As Image
-    Friend MustOverride Function GetTitle() As String
-    Friend MustOverride Function GetDescription() As String
-    Friend MustOverride Function RefreshQuery() As NHibernate.ICriteria
-    Friend MustOverride Function QuickSearchQuery(SearchString As String) As NHibernate.ICriteria
-    Friend MustOverride Function GetObjectCount() As Integer
-    Friend MustOverride Function GetObjectList(Criteria As NHibernate.ICriteria) As IList(Of T)
-    Friend MustOverride Function GetListBuilder() As IListBuilder
+    Friend Overridable Function GetFilterBuilder() As IFilterPanelBuildable
+        Return Nothing
+    End Function
 
     Friend Overridable Function GetActionPanelBuilder() As IActionPanelBuildable
         Return Nothing
     End Function
 
-    Friend Overridable Function GetFilterPanelBuilder() As IFilterPanelBuildable
-        Return Nothing
-    End Function
-
-    Friend Overridable Function GetDefaultUserQuery() As MainFormUserQuery
-        Return New MainFormUserQuery With {.CurrentPage = 1,
-                                           .Size = 50,
-                                           .Orderedby = "Id",
-                                           .SortOrder = Sort.Desc}
+    Friend Overridable Function GetDefaultUserCriteria() As MainFormUserCriteria
+        Return New MainFormUserCriteria With {.CurrentPage = 1,
+                                              .Size = 50,
+                                              .Orderedby = "Id",
+                                              .SortOrder = Sort.Desc,
+                                              .CriteriaFilter = RefreshQuery()}
     End Function
 
     Friend Overridable Sub OnSelectListItem(ids As List(Of Integer))
+    End Sub
+
+    Friend Sub BuildActionPanel()
+        MainListView.SetActionPanel(GetActionPanelBuilder())
     End Sub
 
     Public Sub Initialise()
@@ -63,7 +60,9 @@ Public MustInherit Class MainListViewPresenter(Of T)
         SetNavigationTitle()
         SetNavigationDescription()
         BuildActionPanel()
+        'BuildFilterPanel()
     End Sub
+
     Private Sub SetNavigationIcon()
         MainListView.NavigationIcon = GetIcon()
     End Sub
@@ -76,40 +75,12 @@ Public MustInherit Class MainListViewPresenter(Of T)
         MainListView.NavigationDescription = GetDescription()
     End Sub
 
-    Private Sub SetUserQuery()
-        MainListView.SetUserQuery(CurrentUserQuery)
+    Private Sub ResetUserCriteria()
+        CurrentUserCriteria = GetDefaultUserCriteria()
     End Sub
 
-    Private CurrentQueryCriteria As NHibernate.ICriteria
-
-    Private Function BuildCriteria() As NHibernate.ICriteria
-        CurrentQueryCriteria = RefreshQuery()
-        CreateQuickSearchQuery()
-        AddPagingToQuery()
-        AddOrderbyToQuery()
-        Return CurrentQueryCriteria
-    End Function
-
-    Private Sub CreateQuickSearchQuery()
-        CurrentQueryCriteria = QuickSearchQuery(CurrentUserQuery.QuickSearch)
-    End Sub
-
-    Private Sub AddPagingToQuery()
-        CurrentQueryCriteria.SetFirstResult(CurrentUserQuery.Size * (CurrentUserQuery.CurrentPage - 1)).SetMaxResults(CurrentUserQuery.Size)
-    End Sub
-
-    Private Sub AddOrderbyToQuery()
-        Select Case CurrentUserQuery.SortOrder
-            Case Sort.Asc
-                CurrentQueryCriteria.AddOrder(NHibernate.Criterion.Order.Asc(CurrentUserQuery.Orderedby))
-            Case Sort.Desc
-                CurrentQueryCriteria.AddOrder(NHibernate.Criterion.Order.Desc(CurrentUserQuery.Orderedby))
-        End Select
-    End Sub
-
-    Private Sub OnListChange(UserQuery As MainFormUserQuery)
-        CurrentUserQuery = UserQuery
-        OnRefreshList()
+    Private Sub SetMainFormUserCriteria()
+        MainListView.SetUserQuery(CurrentUserCriteria)
     End Sub
 
     Private Sub OnRefreshList()
@@ -119,24 +90,83 @@ Public MustInherit Class MainListViewPresenter(Of T)
         BuildActionPanel()
     End Sub
 
+    Private Function BuildCriteria() As NHibernate.ICriteria
+        CurrentQueryCriteria = RefreshQuery()
+        CreateQuickSearchQuery()
+        CreateFilterQuery()
+        AddPagingToQuery()
+        AddOrderbyToQuery()
+        ResetUserCriteria()
+        Return CurrentQueryCriteria
+    End Function
+
+    Private Function GetCount() As Integer
+        CurrentQueryCriteria = RefreshQuery()
+        CreateQuickSearchQuery()
+        ResetUserCriteria()
+        Return GetObjectCount()
+    End Function
+
+    Private Sub CreateQuickSearchQuery()
+        If (Not String.IsNullOrEmpty(CurrentUserCriteria.QuickSearch)) AndAlso CurrentUserCriteria.State = UserCriteriaState.QuickSearch Then CurrentQueryCriteria = QuickSearchQuery(CurrentUserCriteria.QuickSearch)
+    End Sub
+
+    Private Sub CreateFilterQuery()
+        If Not CurrentUserCriteria.CriteriaFilter Is Nothing AndAlso CurrentUserCriteria.State = UserCriteriaState.Criteria Then CurrentQueryCriteria = CurrentUserCriteria.CriteriaFilter
+    End Sub
+
+    Private Sub AddPagingToQuery()
+        CurrentQueryCriteria.SetFirstResult(CurrentUserCriteria.Size * (CurrentUserCriteria.CurrentPage - 1)).SetMaxResults(CurrentUserCriteria.Size)
+    End Sub
+
+    Private Sub AddOrderbyToQuery()
+        CurrentQueryCriteria.ClearOrders()
+        Select Case CurrentUserCriteria.SortOrder
+            Case Sort.Asc
+                CurrentQueryCriteria.AddOrder(NHibernate.Criterion.Order.Asc(CurrentUserCriteria.Orderedby))
+            Case Sort.Desc
+                CurrentQueryCriteria.AddOrder(NHibernate.Criterion.Order.Desc(CurrentUserCriteria.Orderedby))
+        End Select
+    End Sub
+
+    Private Sub OnListChange(UserCriteria As MainFormUserCriteria)
+        CurrentUserCriteria = UserCriteria
+        OnRefreshList()
+    End Sub
+
     Private Sub ResetPage()
         MainListView.ResetPageNumber()
     End Sub
 
     Private Sub SetItemCount()
-        MainListView.SetItemCount(GetObjectCount)
+        MainListView.SetItemCount(GetCount)
     End Sub
 
     Private Sub DisplayListView()
         MainListView.SetList(GetListBuilder())
     End Sub
 
-    Friend Sub BuildActionPanel()
-        MainListView.SetActionPanel(GetActionPanelBuilder())
-    End Sub
+    'Private Sub BuildFilterPanel()
+    '    MainListView.SetFilterPanel(GetFilterBuilder)
+    'End Sub
 
     Private Sub OnExport()
         Throw New NotImplementedException()
     End Sub
 
+    Private Function GetObjectList(Criteria As NHibernate.ICriteria) As System.Collections.Generic.IList(Of T)
+        Return Criteria.List(Of T)()
+    End Function
+
+    Private Function GetObjectCount() As Integer
+        Return QueryHelper.CriteriaCount(CurrentQueryCriteria)
+    End Function
+
+    Private Function QuickSearchQuery(SearchString As String) As NHibernate.ICriteria
+        Return QueryHelper.QuickSearchQuery(CurrentQueryCriteria, SearchString)
+    End Function
+
+    Friend Function RefreshQuery() As NHibernate.ICriteria
+        Return QueryHelper.CreateListViewQuery(nHibernateSession)
+    End Function
 End Class

@@ -1,13 +1,14 @@
-﻿Public Class MainFormListViewView
-    Implements IMainFormListViewView
+﻿Imports System.Runtime.InteropServices
 
+Public Class MainFormListViewView
+    Implements IMainFormListViewView
 
 #Region "Event & Handlers"
 
     Public Event RaiseExportList() Implements IMainFormListViewView.RaiseExportList
     Public Event RaiseRefreshList() Implements IMainFormListViewView.RaiseRefreshList
     Public Event RaiseQuickSearch(SearchString As String) Implements IMainFormListViewView.RaiseQuickSearch
-    Public Event RaiseListChange(UserQuery As MainFormUserQuery) Implements IMainFormListViewView.RaiseListChange
+    Public Event RaiseListChange(UserQuery As MainFormUserCriteria) Implements IMainFormListViewView.RaiseListChange
     Public Event RaiseOpenListItem(id As Integer) Implements IMainFormListViewView.RaiseOpenListItem
     Public Event RaiseSelectListItem(ids As System.Collections.Generic.List(Of Integer)) Implements IMainFormListViewView.RaiseSelectListItem
 
@@ -24,9 +25,8 @@
         AddHandler MainFormListView.ItemSelectionChanged, AddressOf ItemSelectionChanged
     End Sub
 
-    Private Sub QuickSearch(sender As System.Object, e As System.EventArgs)
-        CurrentUserQuery.QuickSearch = QuickSearchCueTextBox.Text
-        RaiseEvent RaiseListChange(CurrentUserQuery)
+    Private Sub ListChange()
+        RaiseEvent RaiseListChange(CurrentUserCriteria)
     End Sub
 
     Private Sub RefreshView(sender As System.Object, e As System.EventArgs)
@@ -42,7 +42,15 @@
         If SelectedId <> 0 Then RaiseEvent RaiseOpenListItem(SelectedId)
     End Sub
 
+    Private Sub ItemSelectionChanged(sender As Object, e As ListViewItemSelectionChangedEventArgs)
+        SelectListItem()
+    End Sub
+
     Private Sub SelectViewItem(sender As System.Object, e As System.EventArgs)
+        SelectListItem()
+    End Sub
+
+    Private Sub SelectListItem()
         Dim SelectedIds As New List(Of Integer)
         For Each item As ListViewItem In MainFormListView.SelectedItems
             SelectedIds.Add(Convert.ToInt32(item.Text))
@@ -51,15 +59,15 @@
     End Sub
 
     Private Sub PageNext(sender As System.Object, e As System.EventArgs)
-        If CurrentUserQuery.CurrentPage < MaxPages() Then
-            CurrentUserQuery.CurrentPage += 1
+        If CurrentUserCriteria.CurrentPage < MaxPages() Then
+            CurrentUserCriteria.CurrentPage += 1
             ChangePageNumber()
         End If
     End Sub
 
     Private Sub PagePrevious(sender As System.Object, e As System.EventArgs)
-        If CurrentUserQuery.CurrentPage > 1 Then
-            CurrentUserQuery.CurrentPage -= 1
+        If CurrentUserCriteria.CurrentPage > 1 Then
+            CurrentUserCriteria.CurrentPage -= 1
             ChangePageNumber()
         End If
     End Sub
@@ -69,13 +77,15 @@
     End Sub
 
     Private Sub ColumnClick(sender As System.Object, e As ColumnClickEventArgs)
-        CurrentUserQuery.Orderedby = CurrentListBuilder.OrderBy(e.Column)
-        If CurrentUserQuery.SortOrder = Sort.Desc Then CurrentUserQuery.SortOrder = Sort.Asc Else CurrentUserQuery.SortOrder = Sort.Desc
-        RaiseEvent RaiseListChange(CurrentUserQuery)
+        CurrentUserCriteria.Orderedby = CurrentListBuilder.OrderBy(e.Column)
+        If CurrentUserCriteria.SortOrder = Sort.Desc Then CurrentUserCriteria.SortOrder = Sort.Asc Else CurrentUserCriteria.SortOrder = Sort.Desc
+        ListChange()
     End Sub
 
-    Private Sub ItemSelectionChanged(sender As Object, e As ListViewItemSelectionChangedEventArgs)
-        Me.SelectViewItem(sender, e)
+    Private Sub QuickSearch(sender As System.Object, e As System.EventArgs)
+        CurrentUserCriteria.State = UserCriteriaState.QuickSearch
+        CurrentUserCriteria.QuickSearch = QuickSearchCueTextBox.Text
+        ListChange()
     End Sub
 
 #End Region
@@ -88,6 +98,7 @@
         ' This call is required by the designer.
         InitializeComponent()
         RegisterHandlers()
+        SetListViewWatermark()
     End Sub
 
     Public Property NavigationIcon As Image Implements IMainFormListViewView.NavigationIcon
@@ -129,7 +140,7 @@
     End Sub
 
     Public Sub ResetPageNumber() Implements IMainFormListViewView.ResetPageNumber
-        CurrentUserQuery.CurrentPage = 1
+        CurrentUserCriteria.CurrentPage = 1
         ChangePageNumber()
     End Sub
 
@@ -141,13 +152,14 @@
 
     Private Sub ChangePageNumber()
         SetPageDisplay()
-        RaiseEvent RaiseListChange(CurrentUserQuery)
+        ListChange()
     End Sub
 
     Private Sub SetPageDisplay()
         If MaxPages() > 1 Then
+            MainFormListViewPageControl.Visible = True
             MainFormListViewPageControl.lblPagetext.Text = String.Format("{0}/{1}",
-                                                                         CurrentUserQuery.CurrentPage.ToString,
+                                                                         CurrentUserCriteria.CurrentPage.ToString,
                                                                          MaxPages)
         Else
             MainFormListViewPageControl.Visible = False
@@ -155,7 +167,7 @@
     End Sub
 
     Private Function MaxPages() As Integer
-        Return Convert.ToInt32(Math.Ceiling(ItemCount / 50))
+        If (ItemCount > 0) Then Return Convert.ToInt32(Math.Ceiling(ItemCount / 50)) Else Return Nothing
     End Function
 
 #End Region
@@ -179,10 +191,75 @@
 
 #End Region
 
-    Private CurrentUserQuery As MainFormUserQuery
+#Region "Filter Panel"
 
-    Public Sub SetUserQuery(UserQuery As MainFormUserQuery) Implements IMainFormListViewView.SetUserQuery
-        CurrentUserQuery = UserQuery
+    Private CurrentFilterPanelBuilder As IFilterPanelBuildable
+
+    'Public Sub SetFilterPanel(FilterPanelBuilder As IFilterPanelBuildable) Implements IMainFormListViewView.SetFilterPanel
+    '    If FilterPanelBuilder Is Nothing Then
+    '        ActionFilterSplitContainer.Panel2Collapsed = True
+    '    Else
+    '        CurrentFilterPanelBuilder = FilterPanelBuilder
+    '        BuildFilterPanel()
+    '    End If
+    'End Sub
+
+    'Private Sub BuildFilterPanel()
+    '    CurrentFilterPanelBuilder.BuildFilterPanel(CurrentUserCriteria.CriteriaFilter, tlpFilter)
+    '    AddHandler CurrentFilterPanelBuilder.RaiseUserCriteriaChange, AddressOf FilterSelectionChanged
+    'End Sub
+
+    Private Sub FilterSelectionChanged(UserCriteria As NHibernate.ICriteria)
+        CurrentUserCriteria.State = UserCriteriaState.Criteria
+        CurrentUserCriteria.CriteriaFilter = UserCriteria
+        ListChange()
     End Sub
 
+#End Region
+
+    Private CurrentUserCriteria As MainFormUserCriteria
+
+    Public Sub SetUserCriteria(UserCriteria As MainFormUserCriteria) Implements IMainFormListViewView.SetUserQuery
+        CurrentUserCriteria = UserCriteria
+    End Sub
+
+    Private Sub SetListViewWatermark()
+        'Const alphaValue As Int32 = 242
+
+        'Dim watermark As Bitmap = Nothing
+        'Dim alphaBitmap As Bitmap = Nothing
+        'Dim g As Graphics = Nothing
+
+        'Try
+        '    watermark = My.Resources._Global.Watermark
+
+        '    Dim lvImage As New Win32.LVBKIMAGE() With {.hbm = watermark.GetHbitmap()}
+
+        '    Dim flags = Win32.LVBKIF_TYPE_WATERMARK Or Win32.LVBKIF_FLAG_ALPHABLEND
+        '    lvImage.ulFlags = flags
+
+        '    alphaBitmap = New Bitmap(watermark.Width, watermark.Height)
+
+        '    g = Graphics.FromImage(alphaBitmap)
+        '    g.Clear(MainFormListView.BackColor)
+        '    g.DrawImage(watermark, 0, 0, alphaBitmap.Width, alphaBitmap.Height)
+        '    g.FillRectangle(New SolidBrush(Color.FromArgb(alphaValue, MainFormListView.BackColor.R, MainFormListView.BackColor.G, MainFormListView.BackColor.B)),
+        '                                   New RectangleF(0, 0, alphaBitmap.Width, alphaBitmap.Height))
+
+        '    lvImage.hbm = alphaBitmap.GetHbitmap
+
+        '    Dim lvImageSize As IntPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(lvImage))
+
+        '    Marshal.StructureToPtr(lvImage, lvImageSize, False)
+
+        '    Win32.SendMessage(MainFormListView.Handle, Win32.LVM_SETBKIMAGE, IntPtr.Zero, lvImageSize)
+        '    Marshal.FreeCoTaskMem(lvImageSize)
+
+        'Finally
+        '    watermark.Dispose()
+        '    alphaBitmap.Dispose()
+        '    g.Dispose()
+        'End Try
+
+    End Sub
 End Class

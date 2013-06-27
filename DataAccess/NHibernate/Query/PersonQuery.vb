@@ -1,24 +1,23 @@
-﻿Imports NHibernate.Criterion
+﻿Public Class PersonQuery
+    Implements IListViewQueryable
 
-Public Class PersonQuery
-
-    Function QuickSearchQuery(session As NHibernate.ISession, searchString As String) As NHibernate.ICriteria
+    Public Function QuickSearchQuery(currentCriteria As NHibernate.ICriteria, searchString As String) As NHibernate.ICriteria Implements IListViewQueryable.QuickSearchQuery
 
         Dim OrStatement = NHibernate.Criterion.Expression.Disjunction()
 
-        OrStatement.Add(Expression.Like(Projections.Property(Of Person)(Function(x) x.Firstname),
+        OrStatement.Add(NHibernate.Criterion.Expression.Like(NHibernate.Criterion.Projections.Property(Of Person)(Function(x) x.Firstname),
                                         searchString,
                                         NHibernate.Criterion.MatchMode.Anywhere))
 
-        OrStatement.Add(Expression.Like(Projections.Property(Of Person)(Function(x) x.Surname),
+        OrStatement.Add(NHibernate.Criterion.Expression.Like(NHibernate.Criterion.Projections.Property(Of Person)(Function(x) x.Surname),
                                         searchString,
                                         NHibernate.Criterion.MatchMode.Anywhere))
 
         If IsDate(searchString) Then
-            OrStatement.Add(Expression.Eq(Projections.Property(Of Person)(Function(x) x.DOB), Date.Parse(searchString)))
+            OrStatement.Add(NHibernate.Criterion.Expression.Eq(NHibernate.Criterion.Projections.Property(Of Person)(Function(x) x.DOB), Date.Parse(searchString)))
         End If
 
-        Return CreateQuery(session).Add(OrStatement)
+        Return currentCriteria.Add(OrStatement)
 
     End Function
 
@@ -58,4 +57,15 @@ Public Class PersonQuery
 
     End Sub
 
+    Public Function CriteriaCount(currentCriteria As NHibernate.ICriteria) As Integer Implements IListViewQueryable.CriteriaCount
+        Return currentCriteria.SetProjection(NHibernate.Criterion.Projections.RowCount).FutureValue(Of Int32).Value
+    End Function
+
+    Public Function CreateListViewQuery(currentNHibernateSession As NHibernate.ISession) As NHibernate.ICriteria Implements IListViewQueryable.CreateListViewQuery
+        Return currentNHibernateSession.CreateCriteria(Of Person)()
+        '_
+        '.SetFetchMode("Address", NHibernate.FetchMode.Join) _
+        '.SetFetchMode("Address.County", NHibernate.FetchMode.Join) _
+        '.SetFetchMode("Region", NHibernate.FetchMode.Join)
+    End Function
 End Class
