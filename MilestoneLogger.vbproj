@@ -136,8 +136,16 @@
     <Compile Include="Framework\UserInterface\UserControl\PageControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Model\Game.vb" />
+    <Compile Include="Model\ICelebratable.vb" />
+    <Compile Include="Model\IPhotographable.vb" />
+    <Compile Include="Model\IPlayable.vb" />
+    <Compile Include="Model\IVisitable.vb" />
     <Compile Include="Model\ModelEntity.vb" />
     <Compile Include="Model\Person.vb" />
+    <Compile Include="Model\Pet\Dog.vb" />
+    <Compile Include="Model\Pet\Pet.vb" />
+    <Compile Include="Model\Pet\Rabbit.vb" />
     <Compile Include="Presenter\PersonPresenter.vb" />
     <Compile Include="Service\PersonService.vb" />
     <Compile Include="View\IView\IPersonView.vb" />
